@@ -14,13 +14,19 @@
 			typeNumber	: -1,
 			correctLevel	: QRErrorCorrectLevel.H,
                         background      : "#ffffff",
-                        foreground      : "#000000"
+                        foreground      : "#000000",
+			isUnicode	: true
 		}, options);
 
 		var createCanvas	= function(){
 			// create the qrcode itself
 			var qrcode	= new QRCode(options.typeNumber, options.correctLevel);
-			qrcode.addData(options.text);
+			if (options.isUnicode) {
+				qrcode.addData(unescape("%EF%BB%BF"));
+				qrcode.addData(unescape(encodeURIComponent(options.text)));
+			} else {
+				qrcode.addData(options.text);
+			}
 			qrcode.make();
 
 			// create canvas element
